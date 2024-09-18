@@ -1,18 +1,17 @@
 [package]
-name = "pole_detector"
+name = "spring_extension_sensing"
 version = "0.1.0"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-safe_drive = "0.2"
+safe_drive = "0.4"
 tokio = { version = "1", features = ["full"] }
-drobo_interfaces = { path = "/tmp/2023_main/drobo_interfaces" }
+drobo_interfaces = { path = "/tmp/spring_extension_sensing/drobo_interfaces" }
 vl53l1x = "1.2"
-gpio-cdev = "0.5"
 
 [package.metadata.ros]
 msg = ["drobo_interfaces"]
-msg_dir = "/tmp/2023_main/"
-safe_drive_version = "0.2"
+msg_dir = "/tmp/spring_extension_sensing/"
+safe_drive_version = "0.4"
