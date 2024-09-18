@@ -20,15 +20,25 @@ async fn main() -> Result<(), DynError> {
     let node = ctx.create_node("pole_detector", None, Default::default())?;
     let publisher =
         node.create_publisher::<drobo_interfaces::msg::MdLibMsg>("md_driver_topic", None)?;
+
     let mut msg = drobo_interfaces::msg::MdLibMsg::new().unwrap();
     msg.address = 0x05;
     msg.mode = 2;
     msg.phase = false;
     msg.timeout = 1000;
 
+    let mut selector = ctx.create_selector()?;
+    selector.add_wall_timer(
+        "publisher",
+        Duration::from_millis(100),
+        Box::new(move || {
+            let distance = vl.read_sample()?.distance;
+            msg.power = calc_md_power(distance);
+            publisher.send(&msg);
+        })
+    )
+
     loop {
-        let distance = vl.read_sample()?.distance;
-        msg.power = calc_md_power(distance);
-        publisher.send(&msg);
+        selector.wait()?;
     }
 }
